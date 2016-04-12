@@ -88,17 +88,17 @@ class JsonBenchmark {
     list
   }
 
-//  @Benchmark
-//  def testJson4sWrite(): String = {
-//    val string = Serialization.write(list)
-//    string
-//  }
-//
-//  @Benchmark
-//  def testPlayJsonWrite(): String = {
-//    val string = Json.toJson(list).toString()
-//    string
-//  }
+  @Benchmark
+  def testJson4sWrite(): String = {
+    val string = Serialization.write(list)
+    string
+  }
+
+  @Benchmark
+  def testPlayJsonWrite(): String = {
+    val string = Json.toJson(list).toString()
+    string
+  }
 
   @Benchmark
   def testPlayJsonRead(): List[Container[JsonTest]] = {
