@@ -18,11 +18,12 @@ import scala.util.Random
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 class ListBenchMark {
 
+  private val entries = (1 to 1000).map(x => Random.nextInt()).toList
+  private var entriesIterator = entries.iterator
+
   private var immutableList = List.empty[Int]
   private var mutableList = scala.collection.mutable.ListBuffer.empty[Int]
   private var javaList: java.util.ArrayList[Int] = new util.ArrayList[Int]()
-  private val entries = (1 to 1000).map(x => Random.nextInt()).toList
-  private var entriesIterator = entries.iterator
 
   /**
    * This ensures that we clear the list before each invocation of

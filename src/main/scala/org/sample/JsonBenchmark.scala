@@ -32,9 +32,8 @@ import scala.util.Random
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 class JsonBenchmark {
 
-  private val string = scala.io.Source.fromFile("test.json").mkString
-  private implicit val formats = DefaultFormats
-  private val list = (1 to 100000).map { x=>
+  private val stringToDeserialize = scala.io.Source.fromFile("test.json").mkString
+  private val listToSerialize = (1 to 100000).map { x=>
     val size = Random.nextInt(10)
     val json = JsonTest(Random.nextInt(), Random.nextDouble(), Random.nextString(size))
     Container(
@@ -45,6 +44,8 @@ class JsonBenchmark {
       offset = 0
     )
   }.toList
+
+  private implicit val formats = DefaultFormats
 
   private implicit val reader: Reads[JsonTest] = (
     (JsPath \ "index").read[Int] and
@@ -84,26 +85,25 @@ class JsonBenchmark {
 
   @Benchmark
   def testJson4sRead(): List[Container[JsonTest]] = {
-    val list = parse(string).extract[List[Container[JsonTest]]]
+    val list = parse(stringToDeserialize).extract[List[Container[JsonTest]]]
     list
   }
 
   @Benchmark
   def testJson4sWrite(): String = {
-    val string = Serialization.write(list)
+    val string = Serialization.write(listToSerialize)
     string
   }
 
   @Benchmark
   def testPlayJsonWrite(): String = {
-    val string = Json.toJson(list).toString()
+    val string = Json.toJson(listToSerialize).toString()
     string
   }
 
   @Benchmark
   def testPlayJsonRead(): List[Container[JsonTest]] = {
-    val list = Json.parse(string).as[List[Container[JsonTest]]]
+    val list = Json.parse(stringToDeserialize).as[List[Container[JsonTest]]]
     list
   }
-
 }

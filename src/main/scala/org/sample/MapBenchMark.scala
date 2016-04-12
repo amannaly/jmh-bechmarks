@@ -19,10 +19,11 @@ class MapBenchMark {
   private case class Entry(key: Int, value: String)
 
   private val entries = (1 to 1000).map(x => Entry(x, x.toString)).toList
+  private var entriesIterator = entries.iterator
+
   private var javaMap = new java.util.HashMap[Int, String]
   private var mutableMap = scala.collection.mutable.Map.empty[Int, String]
   private var immutableMap = Map.empty[Int, String]
-  private var entriesIterator = entries.iterator
 
   @Setup(Level.Invocation)
   def setUp(): Unit = {
